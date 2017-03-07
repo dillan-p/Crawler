@@ -25,5 +25,19 @@ RSpec.describe DomParse do
           "http://www.example.org/foo", "http://www.example.org/bar"])
       end
     end
+
+    context "when body contains subdomains" do
+      let(:body_subdomains) { "<p><a href='http://mail.example.org'>More</a></p>
+      <p>Follow <a href='http://www.iana.org/'>official here</a>.</p>" }
+      subject(:parser_subdomains) { described_class.new(seed_url, body_subdomains) }
+
+      it "rejects them" do
+        expect(parser_subdomains.extract_links).to eq(["http://www.iana.org/"])
+      end
+    end
+  end
+
+  describe "#extract_assets" do
+
   end
 end
