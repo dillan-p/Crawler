@@ -36,7 +36,7 @@ class DomParse
 
   def asset_type(selector, asset)
     if selector == "link"
-      return asset["href"] if asset["href"].include?(".css")
+      return asset["href"] if asset["rel"] == "stylesheet"
     else
       return asset["src"]
     end
