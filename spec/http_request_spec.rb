@@ -9,7 +9,7 @@ RSpec.describe HTTPRequest do
     context "when a url is passed to the function" do
       it "returns the DOM body" do
         stub_request(:get, "http://www.example.org").
-          to_return(:body, "<p>Hello world!</p>")
+          to_return(body: "<p>Hello world!</p>")
 
         expect(http.get).to eq("<p>Hello world!</p>")
       end
