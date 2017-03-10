@@ -1,4 +1,5 @@
 require "rest-client"
+require "uri"
 
 class HTTPRequest
   attr_reader :url
@@ -9,7 +10,8 @@ class HTTPRequest
 
   def get
     begin
-      request = RestClient.get(url)
+      safe_url = URI.parse(URI.encode(url.strip)).to_s
+      request = RestClient.get(safe_url)
       request.body
     rescue
       ""
