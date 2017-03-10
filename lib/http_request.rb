@@ -8,7 +8,11 @@ class HTTPRequest
   end
 
   def get
-    request = RestClient.get(url)
-    request.body
+    begin
+      request = RestClient.get(url)
+      request.body
+    rescue
+      ""
+    end
   end
 end
