@@ -1,7 +1,7 @@
 # Crawler
 
 This repository contains a domain crawler implemented in Ruby.
-It utilises REST client to make HTTP requests, and Nokogiri to parse the DOM.
+It utilises REST Client to make HTTP requests, and Nokogiri to parse the DOM.
 
 ## Installation
 
