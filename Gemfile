@@ -2,7 +2,7 @@
 source "https://rubygems.org"
 
 gem "rspec"
-gem "nokogiri"
+gem "nokogiri", "~>1.8.2"
 gem "rest-client"
 gem "json"
 gem "webmock"
