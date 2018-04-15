@@ -3,13 +3,13 @@
 This repository contains a web crawler implemented in Ruby. The crawler visits every page under a given domain
 and outputs in JSON the URL and its associated static assets.
 
-It utilises [REST Client](https://github.com/rest-client/rest-client) to make HTTP requests, and [Nokogiri](https://github.com/sparklemotion/nokogiri) to parse the DOM.
+It utilises [REST Client](https://github.com/rest-client/rest-client) to make HTTP requests and [Nokogiri](https://github.com/sparklemotion/nokogiri) to parse the DOM.
 
 ## Installation
 
 You'll need to use Ruby 2.3.3. This is defined in the `.ruby-version` file for those using [rbenv](https://github.com/rbenv/rbenv).
 
-Before running the program, you'll also need to install the gems on your local machine using [bundler](https://github.com/bundler/bundler). Once installed, run `bundle install` and you're ready to begin!
+Before running the program, you'll also need to install the gems on your local machine with [bundler](https://github.com/bundler/bundler). Once installed, run `bundle install` and you're ready to begin!
 
 ## Running the crawler
 
