@@ -56,3 +56,5 @@ def crawler_run(domain)
   crawler.crawl
   puts crawler.stdout.to_json
 end
+
+crawler_run(domain)
