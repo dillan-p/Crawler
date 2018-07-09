@@ -1,5 +1,7 @@
 # Crawler
 
+[![CircleCI](https://circleci.com/gh/dillan-p/Crawler.svg?style=svg&circle-token=182dc8f8fadb13013733f35d3c527c0658945420)](https://circleci.com/gh/dillan-p/Crawler)
+
 This repository contains a web crawler implemented in Ruby. The crawler visits every page under a given domain
 and outputs in JSON the URL and its associated static assets.
 
