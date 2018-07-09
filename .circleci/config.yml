@@ -9,9 +9,9 @@ jobs:
       - checkout
 
       - restore_cache:
-        keys:
-          - crawler-{{ checksum "Gemfile.lock" }}
-          - crawler-
+          keys:
+            - crawler-{{ checksum "Gemfile.lock" }}
+            - crawler-
 
       - run:
           name: install dependencies
