@@ -5,6 +5,7 @@ require "uri"
 require "json"
 
 class Crawler
+  include HTTPRequest
   attr_reader :start_url, :url_assets
 
   def initialize(url)
@@ -19,7 +20,7 @@ class Crawler
       p current_url = format_url(queue.shift)
       next if is_different_domain?(current_url) || @visited_urls.include?(current_url)
       @visited_urls << current_url
-      page = HTTPRequest.new(current_url).get
+      page = HTTPRequest::get(current_url)
       parse = DomParse.new(page)
       links = parse.extract_links
       links.map { |link| queue << link unless @visited_urls.include?(link) }

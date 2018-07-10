@@ -1,20 +1,15 @@
-require "rest-client"
-require "uri"
+require 'rest-client'
+require 'uri'
 
-class HTTPRequest
-  attr_reader :url
+class RequestFailure < StandardError
+end
 
-  def initialize(url)
-    @url = url
-  end
-
-  def get
+module HTTPRequest
+  def self.get(url)
     begin
-      safe_url = URI.parse(URI.encode(url.strip)).to_s
-      request = RestClient.get(safe_url)
-      request.body
-    rescue
-      ""
+      RestClient.get(url).body
+    rescue RestClient::ExceptionWithResponse => e
+      raise RequestFailure, e.response
     end
   end
 end
