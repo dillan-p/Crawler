@@ -1,7 +1,7 @@
 require "spec_helper"
-require "dom_parse"
+require "dom_parser"
 
-RSpec.describe DomParse do
+RSpec.describe DomParser do
   let(:seed_url) { "http://www.example.org" }
 
   describe "#extract_links" do

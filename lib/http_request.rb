@@ -3,7 +3,7 @@
 require 'rest-client'
 require 'uri'
 
-class RequestFailure < StandardError
+class CrawlerRequestFailure < StandardError
 end
 
 # Retrieves the DOM as a string for a given url
@@ -11,6 +11,6 @@ module HTTPRequest
   def self.get(url)
     RestClient.get(url).body
   rescue RestClient::ExceptionWithResponse => e
-    raise RequestFailure, e.response
+    raise CrawlerRequestFailure, e.response
   end
 end

@@ -21,10 +21,8 @@ class Crawler
       next if is_different_domain?(current_url) || @visited_urls.include?(current_url)
       @visited_urls << current_url
       page = HTTPRequest::get(current_url)
-      parse = DomParse.new(page)
-      links = parse.extract_links
+      links, assets = DomParse.new(page).parse
       links.map { |link| queue << link unless @visited_urls.include?(link) }
-      assets = parse.extract_assets
       store_url_assets(current_url, assets)
     end
   end

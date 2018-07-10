@@ -1,30 +1,34 @@
 require "nokogiri"
 require "uri"
 
-class DomParse
+class DomParser
   attr_reader :seed_url, :body
 
   def initialize(body)
     @body = body
+    @parsed_body = Nokogiri::HTML(body)
+  end
+
+  def parse
+    [extract_links, extract_assets]
   end
 
   def extract_links
-    html = Nokogiri::HTML(body)
-    html.css("a").map do |link|
+    @parsed_body.css("a").map do |link|
       link["href"]
-    end.reject { |link| link.nil? }
+    end.reject do |link|
+      link.nil?
+    end
   end
 
   def extract_assets
-    html = Nokogiri::HTML(body)
     selectors = ["img", "script", "link"]
-    assets = []
-    selectors.each do |selector|
-      html.css(selector).map do |asset|
-        assets << asset_type(selector, asset)
+
+    assets = selectors.flat_map do |selector|
+      @parsed_body.css(selector).flat_map do |asset|
+        asset_type(selector, asset)
       end
-    end
-    assets.uniq.reject { |asset| asset.nil? }
+    end.uniq.reject { |asset| asset.nil? }
   end
 
   private
