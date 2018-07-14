@@ -11,7 +11,7 @@ It utilises [REST Client](https://github.com/rest-client/rest-client) to make HT
 
 You'll need to use Ruby 2.3.3. This is defined in the `.ruby-version` file for those using [rbenv](https://github.com/rbenv/rbenv).
 
-Before running the program, you'll also need to install the gems on your local machine with [bundler](https://github.com/bundler/bundler). Once installed, run `bundle install` and you're ready to begin!
+Before running the program, you'll also need to install the gems on your local machine with [bundler](https://github.com/bundler/bundler). Just run `bundle install` and you're ready to begin!
 
 ## Running the crawler
 
