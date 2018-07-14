@@ -1,43 +1,32 @@
-require "nokogiri"
-require "uri"
+# frozen_string_literal: true
 
+require 'nokogiri'
+
+# Extracts links and assets in the DOM
 class DomParser
-  attr_reader :seed_url, :body
-
   def initialize(body)
-    @body = body
-    @parsed_body = Nokogiri::HTML(body)
+    @document = Nokogiri::HTML(body)
   end
 
   def parse
-    [extract_links, extract_assets]
-  end
-
-  def extract_links
-    @parsed_body.css("a").map do |link|
-      link["href"]
-    end.reject do |link|
-      link.nil?
-    end
-  end
-
-  def extract_assets
-    selectors = ["img", "script", "link"]
-
-    assets = selectors.flat_map do |selector|
-      @parsed_body.css(selector).flat_map do |asset|
-        asset_type(selector, asset)
-      end
-    end.uniq.reject { |asset| asset.nil? }
+    return extract_links, extract_assets
   end
 
   private
 
-  def asset_type(selector, asset)
-    if selector == "link"
-      return asset["href"] if asset["rel"] == "stylesheet"
-    else
-      return asset["src"]
+  def extract_links
+    @document.css('a').map { |link| link['href'] }
+  end
+
+  def extract_assets
+    @document.css('img', 'script', 'link').reduce([]) do |assets, element|
+      asset = if element['rel'] == 'stylesheet'
+                element['href']
+              else
+                element['src']
+              end
+
+      asset.nil? ? assets : assets << asset
     end
   end
 end

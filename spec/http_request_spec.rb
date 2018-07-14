@@ -23,7 +23,9 @@ RSpec.describe HTTPRequest do
       it 'raises a custom exception with the response' do
         stub_request(:get, 'http://www.example.org')
           .to_raise(
-            CrawlerRequestError.new('<RestClient::Response 404 "<!doctype h...">')
+            CrawlerRequestError.new(
+              '<RestClient::Response 404 "<!doctype h...">'
+            )
           )
 
         expect { get }.to raise_error(
