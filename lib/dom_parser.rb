@@ -9,7 +9,7 @@ class DomParser
   end
 
   def parse
-    return extract_links, extract_assets
+    [extract_links, extract_assets]
   end
 
   private
@@ -19,14 +19,12 @@ class DomParser
   end
 
   def extract_assets
-    @document.css('img', 'script', 'link').reduce([]) do |assets, element|
-      asset = if element['rel'] == 'stylesheet'
-                element['href']
-              else
-                element['src']
-              end
-
-      asset.nil? ? assets : assets << asset
-    end
+    @document.css('img', 'script', 'link').map do |element|
+      if element['rel'] == 'stylesheet'
+        element['href']
+      else
+        element['src']
+      end
+    end.compact
   end
 end
