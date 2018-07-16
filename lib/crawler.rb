@@ -1,12 +1,11 @@
-require "set"
-require_relative "dom_parser"
-require_relative "http_request"
-require "uri"
-require "json"
+# frozen_string_literal: true
+
+require 'set'
+require_relative 'dom_parser'
+require_relative 'http_request'
+require 'uri'
 
 class Crawler
-  attr_reader :start_url, :url_assets
-
   def initialize(url)
     @start_url = url
     @visited_urls = Set.new
@@ -29,27 +28,17 @@ class Crawler
   private
 
   def store_url_assets(url, assets)
-    @url_assets << {url: url, assets: assets}
+    @url_assets << { url: url, assets: assets }
   end
 
   def format_url(url)
-    escaped_url = URI.escape(url)
-    url[0] == "/" ? start_url + escaped_url : escaped_url
+    escaped_url = CGI.escape(url)
+    url[0] == '/' ? start_url + escaped_url : escaped_url
   end
 
   def is_different_domain?(url)
     start_host = URI.parse(start_url).host
     link_host = URI.parse(url).host
-    start_host != link_host ? true : false
+    start_host != link_host
   end
 end
-
-domain = ARGV.first
-
-def crawler_run(domain)
-  crawler = Crawler.new(domain)
-  crawler.crawl
-  puts crawler.url_assets.to_json
-end
-
-crawler_run(domain)
