@@ -25,6 +25,6 @@ class DomParser
       else
         element['src']
       end
-    end.compact
+    end.compact.uniq
   end
 end

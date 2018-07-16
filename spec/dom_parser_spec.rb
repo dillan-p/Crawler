@@ -43,6 +43,23 @@ RSpec.describe DomParser do
       end
     end
 
+    context 'multiple identical stylesheets' do
+      let(:body) do
+        '<link rel="stylesheet" href="/html/styles.css">
+        <link rel="stylesheet" href="/html/styles.css">
+        '
+      end
+
+      it 'only shows up once' do
+        expect(parse).to eq([
+                              [],
+                              [
+                                '/html/styles.css'
+                              ]
+                            ])
+      end
+    end
+
     context 'non-stylesheet link element' do
       let(:body) do
         '<img src="/assets/images/supplementals/web-inspecting/parsing/parse-hello.png"
