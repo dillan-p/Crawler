@@ -31,8 +31,12 @@ class Crawler
   def crawl
     queue = [@start_url]
     until queue.empty?
-      p current_url = queue.shift
-      page = HTTPRequest.get(current_url)
+      current_url = queue.shift
+      begin
+        page = HTTPRequest.get(current_url)
+      rescue CrawlerRequestError
+        next
+      end
       links, assets = DomParser.new(page).parse
       queue.concat(links)
       store_url_assets(current_url, assets)

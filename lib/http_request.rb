@@ -3,8 +3,7 @@
 require 'rest-client'
 require 'uri'
 
-class CrawlerRequestError < StandardError
-end
+class CrawlerRequestError < StandardError; end
 
 # Retrieves the DOM as a string for a given url
 module HTTPRequest
