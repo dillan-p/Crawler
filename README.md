@@ -16,7 +16,7 @@ Before running the program, you'll also need to install the gems on your local m
 ## Running the crawler
 
 ```
-bundle exec ruby crawler.rb "{domain}"
+bundle exec ruby lib/runner.rb "{domain}"
 ``` 
 where `{domain}` is
 the domain you wish to crawl.

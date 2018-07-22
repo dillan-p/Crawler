@@ -15,7 +15,9 @@ class DomParser
   private
 
   def extract_links
-    @document.css('a').map { |link| link['href'] }
+    @document.css('a').map do |link|
+      link['href']
+    end.compact
   end
 
   def extract_assets
