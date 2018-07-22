@@ -65,11 +65,23 @@ RSpec.describe Crawler do
   context 'when the url is from a different domain' do
     let(:path) { 'diff' }
     it 'won\'t be crawled' do
-      stub_request(:get, 'http://differentcrawl.com').
-        to_return(:body => "<a href='#{base_url}/end'>end</a>")
+      stub_request(:get, 'http://differentcrawl.com')
+        .to_return(body: "<a href='#{base_url}/end'>end</a>")
       is_expected.to eq(
         [
           { url: start_url, assets: [] }
+        ]
+      )
+    end
+  end
+
+  context 'when the url is just a path' do
+    let(:path) { 'path' }
+    it 'will crawl it' do
+      is_expected.to eq(
+        [
+          { url: start_url, assets: [] },
+          { url: "#{base_url}/path/end", assets: [] }
         ]
       )
     end

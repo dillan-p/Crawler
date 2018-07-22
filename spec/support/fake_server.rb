@@ -42,6 +42,20 @@ class FakeServer < Sinatra::Base
     body '<a href="http://differentcrawl.com">diff</a>'
   end
 
+  get '/path' do
+    status 200
+    body '<a href="/end">end</a>'
+  end
+
+  get '/path/end' do
+    status 200
+    body '<a href="/end">end</a>'
+  end
+
+  get '/pathend' do
+    status
+  end
+
   get '/end' do
     status 200
     body ''

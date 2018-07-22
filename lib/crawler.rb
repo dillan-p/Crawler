@@ -5,48 +5,40 @@ require_relative 'dom_parser'
 require_relative 'http_request'
 require 'uri'
 
+# Runs the crawler and stores the urls and associated assets
 class Crawler
-
   def initialize(url)
     @start_url = url
     @visited_urls = Set.new
     @url_assets = []
   end
 
-  # def crawl
-  #   queue = [@start_url]
-  #   until queue.empty?
-  #     p current_url = format_url(queue.shift)
-  #     next if different_domain?(current_url) || @visited_urls.include?(current_url)
-  #     @visited_urls << current_url
-  #     page = HTTPRequest.get(current_url)
-  #     links, assets = DomParser.new(page).parse
-  #     links.map { |link| queue << link unless @visited_urls.include?(link) }
-  #     store_url_assets(current_url, assets)
-  #   end
-
-  #   @url_assets
-  # end
-
-  def crawl
-    queue = [@start_url]
+  def crawl(queue = [@start_url])
     until queue.empty?
-      current_url = queue.shift
-      next if @visited_urls.include?(current_url) || different_domain?(current_url)
-      @visited_urls << current_url
+      current_url = format_url(queue.shift)
+      next if visited_or_different_domain?(current_url)
       begin
-        page = HTTPRequest.get(current_url)
+        process_url(current_url).each { |link| queue << link }
       rescue CrawlerRequestError
         next
       end
-      links, assets = DomParser.new(page).parse
-      links.each { |link| queue << link unless @visited_urls.include?(link) }
-      store_url_assets(current_url, assets)
     end
     @url_assets
   end
 
   private
+
+  def process_url(url)
+    @visited_urls << url
+    links, assets = request_and_parse(url)
+    store_url_assets(url, assets)
+    links
+  end
+
+  def request_and_parse(url)
+    page = HTTPRequest.get(url)
+    DomParser.new(page).parse
+  end
 
   def store_url_assets(url, assets)
     @url_assets << { url: url, assets: assets }
@@ -58,8 +50,12 @@ class Crawler
     start_host != link_host
   end
 
-  # def format_url(url)
-  #   escaped_url = URI.escape(url)
-  #   url[0] == '/' ? @start_url + escaped_url : escaped_url
-  # end
+  def format_url(url)
+    escaped_url = URI.escape(url)
+    url[0] == '/' ? @start_url + escaped_url : escaped_url
+  end
+
+  def visited_or_different_domain?(url)
+    @visited_urls.include?(url) || different_domain?(url)
+  end
 end
