@@ -32,13 +32,15 @@ class Crawler
     queue = [@start_url]
     until queue.empty?
       current_url = queue.shift
+      next if @visited_urls.include?(current_url) || different_domain?(current_url)
+      @visited_urls << current_url
       begin
         page = HTTPRequest.get(current_url)
       rescue CrawlerRequestError
         next
       end
       links, assets = DomParser.new(page).parse
-      queue.concat(links)
+      links.each { |link| queue << link unless @visited_urls.include?(link) }
       store_url_assets(current_url, assets)
     end
     @url_assets
@@ -50,14 +52,14 @@ class Crawler
     @url_assets << { url: url, assets: assets }
   end
 
+  def different_domain?(url)
+    start_host = URI.parse(@start_url).host
+    link_host = URI.parse(url).host
+    start_host != link_host
+  end
+
   # def format_url(url)
   #   escaped_url = URI.escape(url)
   #   url[0] == '/' ? @start_url + escaped_url : escaped_url
-  # end
-
-  # def different_domain?(url)
-  #   start_host = URI.parse(@start_url).host
-  #   link_host = URI.parse(url).host
-  #   start_host != link_host
   # end
 end

@@ -32,6 +32,16 @@ class FakeServer < Sinatra::Base
     body message
   end
 
+  get '/visited' do
+    status 200
+    body "<a href='#{@base_url}/visited'>visited</a>"
+  end
+
+  get '/diff' do
+    status 200
+    body '<a href="http://differentcrawl.com">diff</a>'
+  end
+
   get '/end' do
     status 200
     body ''
