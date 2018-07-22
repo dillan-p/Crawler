@@ -1,60 +1,61 @@
-require "set"
-require_relative "dom_parse"
-require_relative "http_request"
-require "uri"
-require "json"
+# frozen_string_literal: true
 
+require 'set'
+require_relative 'dom_parser'
+require_relative 'http_request'
+require 'uri'
+
+# Runs the crawler and stores the urls and associated assets
 class Crawler
-  attr_reader :start_url, :stdout
-
   def initialize(url)
     @start_url = url
     @visited_urls = Set.new
-    @stdout = []
+    @url_assets = []
   end
 
-  def crawl
-    queue = [start_url]
+  def crawl(queue = [@start_url])
     until queue.empty?
-      p url = relative_url(queue.shift)
-      next if domain(url) || @visited_urls.include?(url)
-      @visited_urls << url
-      page = HTTPRequest.new(url).get
-      parse = DomParse.new(page)
-      links = parse.extract_links
-      links.map { |link| queue << link unless @visited_urls.include?(link) }
-      assets = parse.extract_assets
-      stdout_add(url, assets)
+      current_url = format_url(queue.shift)
+      next if visited_or_different_domain?(current_url)
+      begin
+        process_url(current_url).each { |link| queue << link }
+      rescue CrawlerRequestError
+        next
+      end
     end
-  end
-
-  def stdout_add(url, assets)
-    @stdout << {url: url, assets: assets}
+    @url_assets
   end
 
   private
 
-  def relative_url(url)
-    return url[0] == "/" ? start_url + url : url
+  def process_url(url)
+    @visited_urls << url
+    links, assets = request_and_parse(url)
+    store_url_assets(url, assets)
+    links
   end
 
-  def domain(url)
-    begin
-      start_host = URI.parse(start_url).host
-      link_host = URI.parse(url).host
-      return start_host != link_host ? true : false
-    rescue
-      return true
-    end
+  def request_and_parse(url)
+    page = HTTPRequest.get(url)
+    DomParser.new(page).parse
+  end
+
+  def store_url_assets(url, assets)
+    @url_assets << { url: url, assets: assets }
+  end
+
+  def different_domain?(url)
+    start_host = URI.parse(@start_url).host
+    link_host = URI.parse(url).host
+    start_host != link_host
+  end
+
+  def format_url(url)
+    escaped_url = URI.escape(url)
+    url[0] == '/' ? @start_url + escaped_url : escaped_url
+  end
+
+  def visited_or_different_domain?(url)
+    @visited_urls.include?(url) || different_domain?(url)
   end
 end
-
-domain = ARGV.first
-
-def crawler_run(domain)
-  crawler = Crawler.new(domain)
-  crawler.crawl
-  puts crawler.stdout.to_json
-end
-
-crawler_run(domain)

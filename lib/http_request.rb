@@ -1,20 +1,15 @@
-require "rest-client"
-require "uri"
+# frozen_string_literal: true
 
-class HTTPRequest
-  attr_reader :url
+require 'rest-client'
+require 'uri'
 
-  def initialize(url)
-    @url = url
-  end
+class CrawlerRequestError < StandardError; end
 
-  def get
-    begin
-      safe_url = URI.parse(URI.encode(url.strip)).to_s
-      request = RestClient.get(safe_url)
-      request.body
-    rescue
-      ""
-    end
+# Retrieves the DOM as a string for a given url
+module HTTPRequest
+  def self.get(url)
+    RestClient.get(url).body
+  rescue RestClient::ExceptionWithResponse => e
+    raise CrawlerRequestError, e.response
   end
 end
