@@ -3,7 +3,7 @@
 source 'https://rubygems.org'
 
 gem 'json', '~> 2.0.3'
-gem 'nokogiri', '~> 1.8.5'
+gem 'nokogiri', '~> 1.10.1'
 gem 'rest-client', '~> 2.0.1'
 gem 'rspec', '~> 3.5.0'
 gem 'rubocop', '~> 0.56.0', require: false
