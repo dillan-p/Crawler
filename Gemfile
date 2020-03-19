@@ -2,7 +2,7 @@
 
 source 'https://rubygems.org'
 
-gem 'json', '~> 2.0.3'
+gem 'json', '~> 2.3.0'
 gem 'nokogiri', '~> 1.8.5'
 gem 'rest-client', '~> 2.0.1'
 gem 'rspec', '~> 3.5.0'
