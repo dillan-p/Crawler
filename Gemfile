@@ -7,5 +7,5 @@ gem 'nokogiri', '~> 1.8.5'
 gem 'rest-client', '~> 2.0.1'
 gem 'rspec', '~> 3.5.0'
 gem 'rubocop', '~> 0.56.0', require: false
-gem 'sinatra', '~> 1.4.7'
+gem 'sinatra', '~> 2.1.0'
 gem 'webmock', '~> 2.3.2'
